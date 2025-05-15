@@ -108,10 +108,10 @@ Apply Database Migrations (Important!):
 After the containers are up and the database service is ready, run Alembic migrations inside the web container:
 docker-compose exec web alembic upgrade head
 This command applies all pending database schema migrations.
+
 Option B: Local Setup (Without Docker)
 Ensure PostgreSQL is running:
 You need a PostgreSQL server that is running locally or is accessible. Create a database (e.g., task_management) and a user with appropriate privileges. Update your .env file with the correct SQLALCHEMY_DATABASE_URL and SQLALCHEMY_SYNC_DATABASE_URL for your local PostgreSQL instance (e.g., postgresql+asyncpg://your_db_user:your_db_password@localhost:5432/task_management).
-
 Create a virtual environment and activate it:
 python -m venv venv
 On Windows:
@@ -141,7 +141,7 @@ First, ensure your models are correctly imported in app/models/__init__.py and t
 # If using Docker:
 docker-compose exec web alembic revision -m "your_migration_message"
 # If local setup (with virtual environment activated):
-# alembic revision -m "your_migration_message"
+ alembic revision -m "your_migration_message"
 Then, carefully review and edit the generated migration script in the migrations/versions/ directory to ensure it accurately reflects your intended schema changes.
 
 To apply migrations to the database:
