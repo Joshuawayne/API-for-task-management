@@ -1,61 +1,168 @@
-# task-management-api
-a simple task management api 
+# 🚀 TaskMaster API 🚀
 
-This is a simple RESTful API built with FastAPI for task management. It allows you to perform basic CRUD (Create, Read, Update, Delete) operations on a collection of books stored in a database.
-
-## Note
-must have python installed if not fellow the guide [https://realpython.com/installing-python/]
-
-## Setup
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/martcpp/task-management-api.git
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   pip install -r requirements.txt
-   cd app
-   ```
-
-3. **Run the application:**
-
-   ```bash
-   uvicorn main:app --reload
-   ```
-
-   The API will be available at `http://localhost:8000`.
-
-## using docker
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/martcpp/task-management-api.git
-   ```
-   ```bash
-   cd task-management-api
-   ```
-
-2. **Run the application:**
-
-   ```bash
-   docker-compose build .
-   docker up
-   ```
-
-   The API will be available at `http://localhost:8000`
-
-## Endpoints
-`http://localhost:8000/docs` for more information about  the API documentation
+A robust and efficient RESTful API for managing tasks, built with Python, FastAPI, SQLAlchemy, and PostgreSQL. Fully containerized with Docker for easy deployment and development.
 
 
-## Dependencies
+## ✨ Features
 
-- FastAPI: Web framework for building APIs with Python.
-- SQLAlchemy: SQL toolkit and Object-Relational Mapping (ORM) library for Python.
-- uvicorn: ASGI server for running FastAPI applications.
-- postgreSQL: MySQL server for running FastAPI applications with MySQL support enabled
-- psycopg2-binary : for connecting to to postgresql databases
+*   **User Authentication**: Secure sign-up and login functionality using JWT.
+*   **CRUD Operations for Tasks**: Create, Read, Update, and Delete tasks.
+*   **Async Support**: Built with `async/await` for high performance.
+*   **Database Migrations**: Managed by Alembic.
+*   **Dockerized**: Comes with `Dockerfile` and `docker-compose.yml` for easy setup.
+*   **Interactive API Docs**: Automatic OpenAPI (Swagger UI) and ReDoc documentation.
+*   **ORM**: Uses SQLAlchemy for database interactions.
+*   **Schema Validation**: Pydantic for request and response data validation.
+
+## 🛠️ Tech Stack
+
+*   **Backend**: Python 3.10+
+*   **Framework**: FastAPI
+*   **Database**: PostgreSQL
+*   **ORM**: SQLAlchemy (with `asyncpg` driver)
+*   **Migrations**: Alembic
+*   **Containerization**: Docker, Docker Compose
+*   **Authentication**: JWT (python-jose)
+*   **Password Hashing**: Passlib (bcrypt)
+*   **Environment Variables**: Pydantic Settings
+
+## 📂 Project Structure
+  Directory structure:
+└── API task mangement/
+    ├── README.md
+    ├── alembic.ini
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── init.sql
+    ├── LICENSE
+    ├── requirements.txt
+    ├── app/
+    │   ├── __init__.py
+    │   ├── main.py
+    │   ├── api/
+    │   │   ├── __init__.py
+    │   │   ├── task.py
+    │   │   └── user.py
+    │   ├── core/
+    │   │   ├── __init__.py
+    │   │   └── config.py
+    │   ├── crud/
+    │   │   ├── __init__.py
+    │   │   ├── task.py
+    │   │   └── user.py
+    │   ├── db/
+    │   │   ├── __init__.py
+    │   │   └── database.py
+    │   ├── models/
+    │   │   ├── __init__.py
+    │   │   ├── task.py
+    │   │   └── user.py
+    │   ├── schemas/
+    │   │   ├── __init__.py
+    │   │   ├── task.py
+    │   │   └── user.py
+    │   └── utils/
+    │       ├── __init__.py
+    │       └── security.py
+    ├── migrations/
+    │   ├── env.py
+    │   ├── README
+    │   └── script.py.mako
+    └── tests/
+        ├── __init__.py
+        ├── test_auth.py
+        └── test_task.py
+##  Prerequisites
+
+*   Python 3.10 or higher
+*   Docker and Docker Compose (for containerized setup)
+*   pip (Python package installer)
+*   An understanding of RESTful APIs
+
+## ⚙️ Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/<YOUR_USERNAME>/task-management-api.git
+cd task-management-api
+
+# .env
+SQLALCHEMY_DATABASE_URL="postgresql+asyncpg://postgres:password@db/task_management"
+SQLALCHEMY_SYNC_DATABASE_URL="postgresql://postgres:password@db/task_management" # For Alembic
+SECRET_KEY="your_super_secret_key_please_change_me" # Generate a strong random key
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+ \\Setup Options
+You can run the application using Docker (recommended for ease and consistency) or set it up locally.
+Option A: Using Docker (Recommended)
+This is the simplest way to get up and running
+Build and run the containers:
+From the project root directory:
+docker-compose build
+docker-compose up -d
+docker-compose build builds the images defined in docker-compose.yml.
+docker-compose up -d starts the services (web app and database) in detached mode.
+The API will be available at http://localhost:8000. The init.sql script (if configured in docker-compose.yml and present) will attempt to create the database on the first run if it doesn't exist.
+Apply Database Migrations (Important!):
+After the containers are up and the database service is ready, run Alembic migrations inside the web container:
+docker-compose exec web alembic upgrade head
+This command applies all pending database schema migrations.
+Option B: Local Setup (Without Docker)
+Ensure PostgreSQL is running:
+You need a PostgreSQL server that is running locally or is accessible. Create a database (e.g., task_management) and a user with appropriate privileges. Update your .env file with the correct SQLALCHEMY_DATABASE_URL and SQLALCHEMY_SYNC_DATABASE_URL for your local PostgreSQL instance (e.g., postgresql+asyncpg://your_db_user:your_db_password@localhost:5432/task_management).
+
+Create a virtual environment and activate it:
+python -m venv venv
+On Windows:
+venv\Scripts\activate
+On macOS/Linux:
+source venv/bin/activate
+Install dependencies:
+pip install -r requirements.txt
+Apply Database Migrations:
+Ensure your alembic.ini (specifically the sqlalchemy.url setting) points to your local database's synchronous URL, or that migrations/env.py correctly uses SQLALCHEMY_SYNC_DATABASE_URL from your .env file.
+alembic upgrade head
+Run the application:
+uvicorn app.main:app --reload
+
+And viola the API will be available at http://localhost:8000.
+
+
+📚 API Documentation
+Once the application is running, you can access the interactive API documentation generated by FastAPI:
+Swagger UI: http://localhost:8000/docs
+ReDoc: http://localhost:8000/redoc
+These interfaces allow you to explore and interact with all the API endpoints.
+🔄 Database Migrations (Alembic)
+Alembic is used to manage database schema changes.
+To create a new migration (after making changes to app/models/):
+First, ensure your models are correctly imported in app/models/__init__.py and that migrations/env.py points to app.models.Base.metadata.
+# If using Docker:
+docker-compose exec web alembic revision -m "your_migration_message"
+# If local setup (with virtual environment activated):
+# alembic revision -m "your_migration_message"
+Then, carefully review and edit the generated migration script in the migrations/versions/ directory to ensure it accurately reflects your intended schema changes.
+
+To apply migrations to the database:
+# If using Docker:
+docker-compose exec web alembic upgrade head
+# If local setup:
+alembic upgrade head
+
+To downgrade (revert the last migration):
+# If using Docker:
+docker-compose exec web alembic downgrade -1
+# If local setup:
+alembic downgrade -1
+Please note: further instructions on test setup and specific commands will be added here as the test suite develops
+
+🤝 Contributing
+Contributions are welcome! If you'd like to contribute, please follow these steps:
+Fork the Project.
+Create your Feature Branch (git checkout -b feature/AmazingFeature).
+Commit your Changes (git commit -m 'Add some AmazingFeature').
+Push to the Branch (git push origin feature/AmazingFeature).
+Open a Pull Request against the trunk (or main development) branch.
+
+Made with ❤️ by Joshua Mercy
