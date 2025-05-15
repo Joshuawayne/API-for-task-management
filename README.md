@@ -84,7 +84,7 @@ A robust and efficient RESTful API for managing tasks, built with Python, FastAP
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/task-management-api.git
+git clone https://github.com/Joshuawayne/API-for-task-management.git
 cd task-management-api
 
 # .env
